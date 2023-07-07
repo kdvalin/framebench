@@ -7,7 +7,8 @@ setup(
     author="Keith Valin",
     author_email="kvalin@redhat.com",
     install_requires = [
-        "opencv-python"
+        "opencv-python",
+        "fire"
     ],
     entry_points = {
         "console_scripts": [
