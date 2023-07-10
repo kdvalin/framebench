@@ -1,26 +1,46 @@
 import time
+import hashlib
+import logging
+import sys
 
 import cv2
 from PIL import Image
-import hashlib
 
 
-def run(device: str, test_time: int = 30):
+logger = logging.getLogger(__package__)
+
+def setup_capture_device(device: str, resolution: str, framerate: int, format: str):
+    (width, _, height) = resolution.partition("x")
+    
+    vid = cv2.VideoCapture(device)
+    
+    vid.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*format))
+    vid.set(cv2.CAP_PROP_FRAME_WIDTH, int(width))
+    vid.set(cv2.CAP_PROP_FRAME_HEIGHT, int(height))
+
+    if not vid.isOpened():
+        raise RuntimeError(f"Could not open {device}")
+
+    cv_resolution = f"{vid.get(cv2.CAP_PROP_FRAME_WIDTH)}x{vid.get(cv2.CAP_PROP_FRAME_HEIGHT)}"
+    cv_fps = vid.get(cv2.CAP_PROP_FPS)
+    cv_format = int(vid.get(cv2.CAP_PROP_FOURCC)).to_bytes(4, sys.byteorder).decode()
+
+    logger.debug(f"Opened {device} at {cv_resolution} {cv_fps}fps using {cv_format} encoding")
+
+    return vid
+
+
+def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, format="MJPG"):
     """Run benchmark with the provided device
 
     :param device: The video device which will be used.
-    :param time: The time (in seconds) to run the benchmark for.
+    :param test_time: The time (in seconds) to run the benchmark for.
+    :param resolution: The desired resolution of the camera
+    :param framerate: The desired framerate of the camera
+    :param format: The format to be used (must be 4 characters, use `list` to validate what is supported on a camera)
     """
     timings = []
-    vid = cv2.VideoCapture(device)
-    vid.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', "J", "P", "G"))
-    vid.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-    vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
-    print(f"{vid.get(cv2.CAP_PROP_FRAME_WIDTH)}x{vid.get(cv2.CAP_PROP_FRAME_HEIGHT)} @ {vid.get(cv2.CAP_PROP_FPS)} fps using {hex(int(vid.get(cv2.CAP_PROP_FOURCC)))}")
-
-    while not vid.isOpened(): # Wait for cam to open before tagging a start time
-        pass
+    vid = setup_capture_device(device, resolution, framerate, format)
     start_time = time.time()
 
     last_frame = (None, start_time) #checksum, time
@@ -29,7 +49,7 @@ def run(device: str, test_time: int = 30):
         frame_time = time.time()
 
         if not ret:
-            print("Can't receive frame (stream end?).")
+            logging.warn("Can't receive frame (stream end?).")
             continue
 
         #OpenCV brings frames in using BGR, convert it to RGB to prevent PIL from getting confused

@@ -1,10 +1,16 @@
 from .list import list_cams
 from .run import run
 
+import logging
+import os
+
 import fire
 
 
 def main():
+    logging.basicConfig(level=os.environ.get("LOGLEVEL", "DEBUG").upper())
+    logging.Logger(__name__)
+
     fire.Fire({
         "list": list_cams,
         "run": run
