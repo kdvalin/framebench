@@ -1,9 +1,6 @@
-import cv2
-import argparse
-import fire
+from .list import list_cams
 
-def list_cams():
-    print("hit")
+import fire
 
 
 def main():
