@@ -8,7 +8,8 @@ setup(
     author_email="kvalin@redhat.com",
     install_requires = [
         "opencv-python",
-        "fire"
+        "fire",
+        "pillow"
     ],
     entry_points = {
         "console_scripts": [
