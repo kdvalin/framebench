@@ -30,7 +30,7 @@ def run(device: str, time: int = 30):
         pil_chksum = hashlib.sha256(im_pil.tobytes())
 
         if pil_chksum != last_frame_cksum[0]: #New frame
-            timings.append((frame_time - last_frame_cksum[1]).microseconds)
+            timings.append((frame_time - last_frame_cksum[1]).microseconds/1e3)
             last_frame_cksum = (pil_chksum, frame_time)
         
     vid.release()
