@@ -35,7 +35,7 @@ This command requires the binary `v4l2-ctl` to be installed and accessible on th
 An example of the output of this command can be seen below
 
 ```
-(venv) [kvalin@fedora framebench]$ framebench list -d /dev/video0
+$ framebench list -d /dev/video0
 ioctl: VIDIOC_ENUM_FMT
         Type: Video Capture
 
@@ -65,6 +65,7 @@ Options:
 --framerate=<int>
     The desired framerate of the camera during the test.  (Default is 30)
 --format=<str>
-    The format to be used by the camera.  Must be 4 characters, use list command to validate what is supported by the camera.
+    The format to be used by the camera.  Must be 4 characters.
+    Use the "list -d" command to validate what is supported by the camera.
     (Default is MJPG)
 ```
