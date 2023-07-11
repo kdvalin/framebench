@@ -3,6 +3,7 @@ from .test import CamTest
 
 import logging
 import csv
+import time
 
 import yaml
 import pandas as pd 
@@ -29,19 +30,26 @@ def run_multiple(config_path: str, output: str = "timings.csv"):
     with open(config_path, 'r') as config_file:
         config_obj: config.Config = config.Config.parse_obj(yaml.safe_load(config_file))
     
-    with concurrent.futures.ThreadPoolExecutor(max_workers=len(config_obj.cams)) as exeutor:
-        thread_pool = []
-        for cam in config_obj.cams:
-            args = [
-                cam.path,
-                config_obj.test_time,
-                cam.resolution,
-                cam.framerate,
-                cam.stream_format
-            ]
-            thread_pool.append((cam.path, exeutor.submit(run, *args)))
+    thread_pool = []
+    for cam in config_obj.cams:
+        thread_pool.append(CamTest(
+            cam.path,
+            cam.resolution,
+            cam.framerate,
+            cam.stream_format,
+            config_obj.test_time
+        ))
 
-        for thread in thread_pool:
-            cols.append([thread[0], *thread[1].result()])
-    pd.DataFrame(cols).transpose().to_csv(output)
+    for thread in thread_pool:
+        while not thread.ready:
+            time.sleep(0.001)
+    
+    for thread in thread_pool:
+        thread.start()
+    
+    for thread in thread_pool:
+        thread.join()
+        cols.append(thread.get_result())
+
+    pd.DataFrame(cols).transpose().to_csv(output, index=False, header=False)
     
