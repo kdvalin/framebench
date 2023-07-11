@@ -68,4 +68,19 @@ Options:
     The format to be used by the camera.  Must be 4 characters.
     Use the "list -d" command to validate what is supported by the camera.
     (Default is MJPG)
+-o, --output=<str>
+    File path to save the timings to (csv format)
+    (Default is "timings.csv")
+```
+
+### `run_multiple <config>`
+`framebench run_multiple <config>` is used to run a frame timing test on multiple cameras specified in a config file.
+
+See [config.yaml] as an example of this configuration
+
+Options:
+```
+-o, --output=<str>
+    File path to save the timings to (csv format)
+    (Default is "timings.csv")
 ```

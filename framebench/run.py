@@ -25,6 +25,12 @@ def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, fo
     pd.DataFrame(test.get_result()).to_csv(output, index=False, header=False)
 
 def run_multiple(config_path: str, output: str = "timings.csv"):
+    """Run benchmark with multiple devices.
+
+    :param config_path: Path to a YAML file containing the device configurations
+        (if non-required options are not provided, their defaults are the same as in test)
+    :param output: The file to be used to save the timing results
+    """
     cols = []
 
     with open(config_path, 'r') as config_file:
