@@ -9,7 +9,10 @@ setup(
     install_requires = [
         "opencv-python",
         "fire",
-        "pillow"
+        "pillow",
+        "pyyaml",
+        "pydantic",
+        "pandas"
     ],
     entry_points = {
         "console_scripts": [

@@ -1,0 +1,4 @@
+test_time: 5
+cams:
+  - path: /dev/video0
+  - path: /dev/video4

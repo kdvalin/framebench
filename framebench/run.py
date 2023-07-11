@@ -1,9 +1,15 @@
+from .models import config
+
 import time
 import hashlib
 import logging
 import sys
+import concurrent.futures
+import csv
 
 import cv2
+import yaml
+import pandas as pd 
 from PIL import Image
 
 
@@ -63,4 +69,27 @@ def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, fo
             last_frame = (pil_chksum, frame_time)
         
     vid.release()
-    print(','.join([str(i) for i in timings[1:]]))
+    return timings
+
+def run_multiple(config_path: str, output: str = "timings.csv"):
+    cols = []
+
+    with open(config_path, 'r') as config_file:
+        config_obj: config.Config = config.Config.parse_obj(yaml.safe_load(config_file))
+    
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(config_obj.cams)) as exeutor:
+        thread_pool = []
+        for cam in config_obj.cams:
+            args = [
+                cam.path,
+                config_obj.test_time,
+                cam.resolution,
+                cam.framerate,
+                cam.stream_format
+            ]
+            thread_pool.append((cam.path, exeutor.submit(run, *args)))
+
+        for thread in thread_pool:
+            cols.append([thread[0], *thread[1].result()])
+    pd.DataFrame(cols).transpose().to_csv(output)
+    
