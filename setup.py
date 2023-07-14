@@ -10,6 +10,7 @@ setup(
     url="https://github.com/kdvalin/framebench",
     download_url="https://github.com/kdvalin/framebench/archive/refs/tags/v1.0.0.tar.gz",
     keywords=["camera", "webcam", "framebench", "test", "benchmark", "frame timings"],
+    packages=["framebench", "framebench.models"],
     install_requires = [
         "opencv-python",
         "fire",
