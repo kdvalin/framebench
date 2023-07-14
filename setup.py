@@ -3,12 +3,12 @@ from distutils.core import setup
 setup(
     name="FrameBench",
     description="A Benchmark for measuring frame timings from multiple cameras simultaneously",
-    version="1.0.0",
+    version="1.0.1",
     author="Keith Valin",
     author_email="kvalin@redhat.com",
     license="GPL-3.0",
     url="https://github.com/kdvalin/framebench",
-    download_url="https://github.com/kdvalin/framebench/archive/refs/tags/v1.0.0.tar.gz",
+    download_url="https://github.com/kdvalin/framebench/archive/refs/tags/v1.0.1.tar.gz",
     keywords=["camera", "webcam", "framebench", "test", "benchmark", "frame timings"],
     packages=["framebench", "framebench.models"],
     install_requires = [
