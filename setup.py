@@ -8,6 +8,7 @@ setup(
     author_email="kvalin@redhat.com",
     license="GPL-3.0",
     url="https://github.com/kdvalin/framebench",
+    download_url="https://github.com/kdvalin/framebench/archive/refs/tags/v1.0.0.tar.gz",
     keywords=["camera", "webcam", "framebench", "test", "benchmark", "frame timings"],
     install_requires = [
         "opencv-python",
