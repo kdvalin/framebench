@@ -24,9 +24,9 @@ setup(
         ]
     },
     classifiers=[
-        "5 - Production/Stable",
-        "Topic :: Benchmark :: Cameras"
-        "License :: OSI Approved :: GPL3 License",
+        "Development Status :: 5 - Production/Stable",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.9",
