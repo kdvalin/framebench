@@ -8,7 +8,7 @@ import fire
 
 
 def main():
-    logging.basicConfig(level=os.environ.get("LOGLEVEL", "DEBUG").upper())
+    logging.basicConfig(level=os.environ.get("LOGLEVEL", "WARNING").upper())
     logging.Logger(__name__)
 
     fire.Fire({

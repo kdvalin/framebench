@@ -7,8 +7,6 @@ import sys
 import cv2
 from PIL import Image
 
-logger = logging.getLogger(__package__)
-
 class CamTest(threading.Thread):
     def __init__(self, cam: str, resolution = "640x480", framerate = 30, stream_format = "MJPG", test_time = 30):
         self.cam = cam
@@ -20,6 +18,7 @@ class CamTest(threading.Thread):
         self.results = [self.cam]
         self.ready = False
         self.vid = self._setup_capture_device()
+        self.logger = logging.getLogger(__package__)
         threading.Thread.__init__(self)
 
     def run(self):
@@ -31,7 +30,7 @@ class CamTest(threading.Thread):
             frame_time = time.time()
 
             if not ret:
-                logging.warn("Can't receive frame (stream end?).")
+                self.logger.warn("Can't receive frame (stream end?).")
                 continue
 
             #OpenCV brings frames in using BGR, convert it to RGB to prevent PIL from getting confused
@@ -65,7 +64,7 @@ class CamTest(threading.Thread):
         cv_fps = vid.get(cv2.CAP_PROP_FPS)
         cv_format = int(vid.get(cv2.CAP_PROP_FOURCC)).to_bytes(4, sys.byteorder).decode()
 
-        logger.debug(f"Opened {self.cam} at {cv_resolution} {cv_fps}fps using {cv_format} encoding")
+        self.logger.info(f"Opened {self.cam} at {cv_resolution} {cv_fps}fps using {cv_format} encoding")
         self.ready = True
 
         return vid
