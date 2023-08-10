@@ -17,8 +17,8 @@ class CamTest(threading.Thread):
 
         self.results = [self.cam]
         self.ready = False
-        self.vid = self._setup_capture_device()
         self.logger = logging.getLogger(__package__)
+        self.vid = self._setup_capture_device()
         threading.Thread.__init__(self)
 
     def run(self):
