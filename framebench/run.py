@@ -25,6 +25,7 @@ def _run_test(device: str, queue: Queue, test_time: int = 30, resolution="640x48
     mem.close()
     test.run()
     queue.put(test.get_result())
+    queue.close()
     
 
 def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, format="MJPG", output="timings.csv"):
@@ -87,3 +88,4 @@ def run_multiple(config_path: str, output: str = "timings.csv"):
     
     print(cols)
     ready_mem.close()
+    results_queue.close()
