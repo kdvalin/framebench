@@ -7,7 +7,7 @@ import sys
 import cv2
 from PIL import Image
 
-class CamTest(threading.Thread):
+class CamTest:
     def __init__(self, cam: str, resolution = "640x480", framerate = 30, stream_format = "MJPG", test_time = 30):
         self.cam = cam
         self.resolution = resolution
@@ -19,7 +19,6 @@ class CamTest(threading.Thread):
         self.ready = False
         self.logger = logging.getLogger(__package__)
         self.vid = self._setup_capture_device()
-        threading.Thread.__init__(self)
 
     def run(self):
         start_time = time.time()
