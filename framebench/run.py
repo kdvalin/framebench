@@ -38,8 +38,7 @@ def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, fo
     :param format: The format to be used (must be 4 characters, use `list` to validate what is supported on a camera)
     """
     test = CamTest(device, resolution, framerate, format, test_time)
-    test.start()
-    test.join()
+    test.run()
     
     pd.DataFrame(test.get_result()).to_csv(output, index=False, header=False)
 
@@ -86,6 +85,6 @@ def run_multiple(config_path: str, output: str = "timings.csv"):
     for process in process_list: # Grab the results when they come in
         cols.append(results_queue.get())
     
-    print(cols)
+    pd.DataFrame(cols).to_csv(output, index=False, header=False)
     ready_mem.unlink()
     results_queue.close()
