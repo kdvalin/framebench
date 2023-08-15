@@ -87,5 +87,5 @@ def run_multiple(config_path: str, output: str = "timings.csv"):
         cols.append(results_queue.get())
     
     print(cols)
-    ready_mem.close()
+    ready_mem.unlink()
     results_queue.close()
