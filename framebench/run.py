@@ -9,7 +9,7 @@ from multiprocessing.shared_memory import SharedMemory
 from multiprocessing import Process, Queue
 
 import yaml
-import pandas as pd 
+import pandas as pd
 
 READY_MEM_NAME="framebench_all_ready"
 READY_MEM_SIZE=1
@@ -39,8 +39,10 @@ def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, fo
     """
     test = CamTest(device, resolution, framerate, format, test_time)
     test.run()
-    
-    pd.DataFrame(test.get_result()).to_csv(output, index=False, header=False)
+
+    df = pd.DataFrame(test.get_result())
+    df = df.transpose()
+    df.to_csv(output, index=False, header=False)
 
 def run_multiple(config_path: str, output: str = "timings.csv"):
     """Run benchmark with multiple devices.
@@ -85,6 +87,7 @@ def run_multiple(config_path: str, output: str = "timings.csv"):
     for process in process_list: # Grab the results when they come in
         cols.append(results_queue.get())
     
-    pd.DataFrame(cols).to_csv(output, index=False, header=False)
+    df = pd.DataFrame(cols)
+    df.to_csv(output, index=False, header=False)
     ready_mem.unlink()
     results_queue.close()

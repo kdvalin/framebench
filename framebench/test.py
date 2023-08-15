@@ -35,7 +35,7 @@ class CamTest:
             #OpenCV brings frames in using BGR, convert it to RGB to prevent PIL from getting confused
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             pil_img = Image.fromarray(frame)
-            pil_chksum = hashlib.sha1(pil_img.tobytes())
+            pil_chksum = hashlib.md5(pil_img.tobytes())
             
             if pil_chksum != last_frame[0]:
                 if last_frame[0] != None: # Skip first frame, since camera initialization gives a large initial frame time
