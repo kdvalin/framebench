@@ -15,7 +15,7 @@ def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, in
     :param test_time: The time (in seconds) to run the benchmark for.
     :param resolution: The desired resolution of the camera
     :param framerate: The desired framerate of the camera
-    :param format: The format to be used (must be 4 characters, use `list` to validate what is supported on a camera)
+    :param format: The format to be used (use `list` to validate what is supported on a camera, MJPG is mjpeg)
     """
     test = CameraTest(device, test_time, input_format, resolution, framerate)
     test.run()
