@@ -1,9 +1,11 @@
 from .models import config
 from .test import CameraTest
 
+import pandas as pd
+
 import logging
-import csv
 import time
+import sys
 
 
 def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, input_format="mjpeg", output="-"):
@@ -19,3 +21,9 @@ def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, in
     test.run()
     results = test.get_results()
     test.cleanup()
+
+    file = sys.stdout if output == '-' else open(output, 'w')
+
+    df = pd.DataFrame(data=results)
+    df.to_csv(file, index=False)
+    file.close()

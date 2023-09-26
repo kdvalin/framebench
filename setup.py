@@ -15,7 +15,8 @@ setup(
         "fire",
         "pyyaml",
         "pydantic",
-        "ffmpeg-python"
+        "ffmpeg-python",
+        "pandas"
     ],
     entry_points = {
         "console_scripts": [
