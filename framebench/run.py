@@ -4,7 +4,7 @@ from .test import CameraTest
 import logging
 import csv
 import time
-    
+
 
 def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, input_format="mjpeg", output="-"):
     """Run benchmark with the provided device

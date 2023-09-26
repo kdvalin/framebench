@@ -10,6 +10,7 @@ class CameraTest:
         self.output = [device]
         self.logger = logging.getLogger(__package__)
         (width, _, height) = resolution.partition('x')
+
         self.out_tmp = tempfile.mkstemp(suffix=".mkv", prefix=f"framebench-{device.replace('/', '_')}")[1]
         self.stream = ffmpeg.overwrite_output(
             ffmpeg
@@ -28,7 +29,7 @@ class CameraTest:
     def run(self):
         self.logger.debug(ffmpeg.compile(self.stream))
         self.stream.run()
-    
+
     def get_results(self):
         file_results = ffmpeg.probe(
             self.out_tmp,
@@ -42,8 +43,8 @@ class CameraTest:
             if last is not None:
                 self.output.append(current - last)
             last = current
-        
+
         return self.output
-    
+
     def cleanup(self):
         os.unlink(self.out_tmp)
