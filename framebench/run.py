@@ -12,6 +12,10 @@ import sys
 from multiprocessing import Process, Queue
 from multiprocessing.shared_memory import SharedMemory
 
+def write_to_file(data: pd.DataFrame, dest: str):
+    file = sys.stdout if dest == '-' else open(dest, 'r')
+    data.to_csv(file, index=False)
+    file.close()
 
 def run_multiple(config_file: str, output: str = "-"):
     file: config.Config = config.Config.parse_obj(
@@ -41,11 +45,7 @@ def run_multiple(config_file: str, output: str = "-"):
     for result in proc_man.results():
         cols.append(result)
 
-    file = sys.stdout if output == '-' else open(output, 'w')
-
-    df = pd.DataFrame(cols)
-    df = df.transpose()
-    df.to_csv(file, index=False)
+    write_to_file(pd.DataFrame(cols).transpose(), output)
 
 
 def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, input_format="mjpeg", output="-"):
@@ -62,8 +62,4 @@ def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, in
     results = test.get_results()
     test.cleanup()
 
-    file = sys.stdout if output == '-' else open(output, 'w')
-
-    df = pd.DataFrame(data=results)
-    df.to_csv(file, index=False)
-    file.close()
+    write_to_file(pd.DataFrame(data=results), output)
