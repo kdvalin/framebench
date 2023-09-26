@@ -17,6 +17,7 @@ READY_MEM_SIZE=1
 def _run_test(device: str, test_time: int = 30, resolution="640x480", framerate=30, format="MJPG"):
     test = CameraTest(device)
     test.run()
+    print(test.get_results())
     
 
 def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, format="MJPG", output="timings.csv"):
