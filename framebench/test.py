@@ -1,8 +1,11 @@
-import ffmpeg
 import tempfile
+import logging
+
+import ffmpeg
 
 class CameraTest:
-    def __init__(self, device: str, test_time: int = 30, input_format="mjpeg", resolution="640x480", framerate=10):
+    def __init__(self, device: str, test_time: int = 30, input_format="mjpeg", resolution="640x480", framerate=30):
+        self.logger = logging.getLogger(__package__)
         (width, _, height) = resolution.partition('x')
         self.out_tmp = tempfile.mkstemp(suffix=".mkv", prefix=f"framebench-{device.replace('/', '_')}")
         self.stream = ffmpeg.overwrite_output(
@@ -17,6 +20,8 @@ class CameraTest:
             .output(self.out_tmp[1], codec="copy", t=test_time)
         )
 
+        self.logger.info(f"Opened {device} at {resolution} targeting {framerate}fps ({input_format})")
+
     def run(self):
-        print(ffmpeg.compile(self.stream))
+        self.logger.debug(ffmpeg.compile(self.stream))
         self.stream.run()
