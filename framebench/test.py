@@ -43,7 +43,8 @@ class CameraTest:
                 r=framerate,
                 framerate=framerate,
                 input_format=input_format,
-                video_size=(width, height)
+                video_size=(width, height),
+                loglevel="error"
             )
             .output(self.out_tmp, codec="copy", t=test_time)
         )
