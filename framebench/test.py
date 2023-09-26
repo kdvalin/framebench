@@ -1,6 +1,7 @@
 import tempfile
 import logging
 import json
+import os
 
 import ffmpeg
 
@@ -43,3 +44,6 @@ class CameraTest:
             last = current
         
         return self.output
+    
+    def cleanup(self):
+        os.unlink(self.out_tmp)
