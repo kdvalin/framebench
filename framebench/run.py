@@ -1,4 +1,5 @@
 from .models import config
+from .proc_manager import ProcessManager
 from .test import CameraTest, process_main
 from .consts import READY_MEM_NAME, READY_MEM_SIZE
 
@@ -19,15 +20,12 @@ def run_multiple(config_file: str, output: str = "-"):
         )
     )
     cols = []
-    process_pool = []
-    results_queue = Queue()
-    ready_mem = SharedMemory(name=READY_MEM_NAME, create=True, size=READY_MEM_SIZE)
-
+    proc_man = ProcessManager()
     for cam in file.cams:
-        cam_proc = Process(
+        proc_man.add_process(
             target=process_main,
             args=(
-                results_queue,
+                proc_man.results_queue,
                 cam.path,
                 file.test_time,
                 cam.stream_format,
@@ -35,25 +33,19 @@ def run_multiple(config_file: str, output: str = "-"):
                 cam.framerate
             )
         )
-        cam_proc.start()
-
-        process_pool.append(cam_proc)
     
-    for _ in process_pool:
-        results_queue.get()
-    ready_mem.buf[0] = 1
+    proc_man.start_processes()
+    proc_man.wait_until_ready()
+    proc_man.trigger_ready()
     
-    for _ in process_pool:
-        cols.append(results_queue.get())
+    for result in proc_man.results():
+        cols.append(result)
 
     file = sys.stdout if output == '-' else open(output, 'w')
 
     df = pd.DataFrame(cols)
     df = df.transpose()
     df.to_csv(file, index=False)
-
-    ready_mem.unlink()
-    results_queue.close()
 
 
 def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, input_format="mjpeg", output="-"):
