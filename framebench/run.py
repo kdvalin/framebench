@@ -14,7 +14,7 @@ from multiprocessing.shared_memory import SharedMemory
 
 def write_to_file(data: pd.DataFrame, dest: str):
     file = sys.stdout if dest == '-' else open(dest, 'r')
-    data.to_csv(file, index=False)
+    data.to_csv(file, index=False, header=False)
     file.close()
 
 def run_multiple(config_file: str, output: str = "-"):
