@@ -25,7 +25,7 @@ def process_main(queue: Queue, device: str, test_time: int = 30, input_format="m
     
     queue.put(test.get_results())
 
-    mem.close()
+    mem.unlink()
     test.cleanup()
 
 
