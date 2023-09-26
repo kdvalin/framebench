@@ -3,9 +3,18 @@ from .test import CameraTest
 
 import pandas as pd
 
+import yaml
 import logging
 import time
 import sys
+
+
+def run_multiple(config_file: str, output: str = "-"):
+    file = config.Config.parse_obj(
+        yaml.safe_load(
+            open(config_file, "r")
+        )
+    )
 
 
 def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, input_format="mjpeg", output="-"):

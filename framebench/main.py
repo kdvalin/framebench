@@ -1,5 +1,5 @@
 from .list import list_cams
-from .run import run
+from .run import run, run_multiple
 
 import logging
 import os
@@ -14,4 +14,5 @@ def main():
     fire.Fire({
         "list": list_cams,
         "run": run,
+        "multi": run_multiple
     })
