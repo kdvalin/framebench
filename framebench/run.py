@@ -1,20 +1,59 @@
 from .models import config
-from .test import CameraTest
+from .test import CameraTest, process_main
+from .consts import READY_MEM_NAME, READY_MEM_SIZE
 
 import pandas as pd
 
 import yaml
 import logging
-import time
 import sys
+
+from multiprocessing import Process, Queue
+from multiprocessing.shared_memory import SharedMemory
 
 
 def run_multiple(config_file: str, output: str = "-"):
-    file = config.Config.parse_obj(
+    file: config.Config = config.Config.parse_obj(
         yaml.safe_load(
             open(config_file, "r")
         )
     )
+    cols = []
+    process_pool = []
+    results_queue = Queue()
+    ready_mem = SharedMemory(name=READY_MEM_NAME, create=True, size=READY_MEM_SIZE)
+
+    for cam in file.cams:
+        cam_proc = Process(
+            target=process_main,
+            args=(
+                results_queue,
+                cam.path,
+                file.test_time,
+                cam.stream_format,
+                cam.resolution,
+                cam.framerate
+            )
+        )
+        cam_proc.start()
+
+        process_pool.append(cam_proc)
+    
+    for _ in process_pool:
+        results_queue.get()
+    ready_mem.buf[0] = 1
+    
+    for _ in process_pool:
+        cols.append(results_queue.get())
+
+    file = sys.stdout if output == '-' else open(output, 'w')
+
+    df = pd.DataFrame(cols)
+    df = df.transpose()
+    df.to_csv(file, index=False)
+
+    ready_mem.unlink()
+    results_queue.close()
 
 
 def run(device: str, test_time: int = 30, resolution="640x480", framerate=30, input_format="mjpeg", output="-"):

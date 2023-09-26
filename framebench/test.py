@@ -1,9 +1,33 @@
+from .consts import READY_MEM_NAME, READY_MEM_SIZE
+
 import tempfile
 import logging
 import json
 import os
+import time
+
+
+from multiprocessing.shared_memory import SharedMemory
+from multiprocessing import Queue
 
 import ffmpeg
+
+
+def process_main(queue: Queue, device: str, test_time: int = 30, input_format="mjpeg", resolution="640x480", framerate=30):
+    mem = SharedMemory(name=READY_MEM_NAME, create=False, size=READY_MEM_SIZE)
+    test = CameraTest(device, test_time, input_format, resolution, framerate)
+    
+    queue.put('ready')
+    while mem.buf[0] != 1:
+        time.sleep(0.066)
+
+    test.run()
+    
+    queue.put(test.get_results())
+
+    mem.close()
+    test.cleanup()
+
 
 class CameraTest:
     def __init__(self, device: str, test_time: int = 30, input_format="mjpeg", resolution="640x480", framerate=30):
