@@ -14,5 +14,5 @@ def main():
     fire.Fire({
         "list": list_cams,
         "run": run,
-        "run_multiple": run_multiple
+        "multi": run_multiple
     })

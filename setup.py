@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name="FrameBench",
     description="A Benchmark for measuring frame timings from multiple cameras simultaneously",
-    version="1.1.0",
+    version="2.0.0",
     author="Keith Valin",
     author_email="kvalin@redhat.com",
     license="GPL-3.0",
@@ -12,11 +12,10 @@ setup(
     keywords=["camera", "webcam", "framebench", "test", "benchmark", "frame timings"],
     packages=["framebench", "framebench.models"],
     install_requires = [
-        "opencv-python",
         "fire",
-        "pillow",
         "pyyaml",
         "pydantic",
+        "ffmpeg-python",
         "pandas"
     ],
     entry_points = {

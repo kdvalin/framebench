@@ -1,0 +1,2 @@
+READY_MEM_NAME="framebench_all_ready"
+READY_MEM_SIZE=1
