@@ -20,12 +20,12 @@ def process_main(queue: Queue, device: str, test_time: int = 30, input_format="m
     queue.put('ready')
     while mem.buf[0] != 1:
         time.sleep(0.066)
+    mem.close()
 
     test.run()
     
     queue.put(test.get_results())
 
-    mem.unlink()
     test.cleanup()
 
 

@@ -31,5 +31,7 @@ class ProcessManager:
             yield self.results_queue.get()
     
     def close(self):
+        for proc in self._process_pool:
+            proc.close()
         self._ready_mem.unlink()
         self.results_queue.close()
