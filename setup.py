@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name="FrameBench",
     description="A Benchmark for measuring frame timings from multiple cameras simultaneously",
-    version="2.0.0",
+    version="2.0.1",
     author="Keith Valin",
     author_email="kvalin@redhat.com",
     license="GPL-3.0",
