@@ -8,6 +8,7 @@ class ProcessManager:
     def __init__(self):
         self._process_pool: List[Process] = []
         self._ready_mem = SharedMemory(name=READY_MEM_NAME, create=True, size=READY_MEM_SIZE)
+        self._ready_mem.buf[0] = 0
         self.results_queue = Queue()
     
     def add_process(self, target, args):
@@ -32,6 +33,8 @@ class ProcessManager:
     
     def close(self):
         for proc in self._process_pool:
-            proc.close()
+            proc.terminate()
         self._ready_mem.unlink()
+        self._ready_mem.buf[0] = 0
+        self._ready_mem.close()
         self.results_queue.close()

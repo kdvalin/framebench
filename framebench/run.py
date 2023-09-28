@@ -12,7 +12,7 @@ import sys
 from multiprocessing import Process, Queue
 
 def write_to_file(data: pd.DataFrame, dest: str):
-    file = sys.stdout if dest == '-' else open(dest, 'r')
+    file = sys.stdout if dest == '-' else open(dest, 'w')
     data.to_csv(file, index=False, header=False)
     file.close()
 
@@ -43,6 +43,8 @@ def run_multiple(config_file: str, output: str = "-"):
     
     for result in proc_man.results():
         cols.append(result)
+
+    proc_man.close()
 
     write_to_file(pd.DataFrame(cols).transpose(), output)
 
