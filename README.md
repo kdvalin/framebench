@@ -2,15 +2,24 @@
 Framebench is a simple benchmark to capture frame times from video devices on Linux.
 
 ## Installation
+### From PyPi
+1. Install `ffmpeg`
+    - `dnf install ffmpeg` (requires [RPMFusion](https://rpmfusion.org/) for Fedora/RHEL)
+2. Simply run `pip3 install framebench` to install framebench from PyPi.
+3. (Optional) Install package that contain v4l2-ctl, this is used to list capabilities of video devices
+    - Fedora: `dnf install v4l-utils`
 
-To install Framebench, do the following steps:
+### From Source
+To install Framebench from source, do the following steps:
 1. Clone this repository
     - `git clone https://github.com/kdvalin/framebench.git`
 2. Enter into the repository's directory
     - `cd framebench`
 3. Install using `pip3`
     - `pip3 install .`
-4. (Optional) Install package that contain v4l2-ctl, this is used to list capabilities of video devices
+4. Install `ffmpeg`
+    - `dnf install ffmpeg` (requires [RPMFusion](https://rpmfusion.org/) for Fedora/RHEL)
+5. (Optional) Install package that contain v4l2-ctl, this is used to list capabilities of video devices
     - Fedora: `dnf install v4l-utils`
 
 ## Commands
@@ -73,10 +82,10 @@ Options:
     (Default is "timings.csv")
 ```
 
-### `run_multiple <config>`
+### `multi <config>`
 `framebench run_multiple <config>` is used to run a frame timing test on multiple cameras specified in a config file.
 
-See [config.yaml] as an example of this configuration
+See [config.yaml](./config.yaml) as an example of this configuration
 
 Options:
 ```
